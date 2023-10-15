@@ -3,17 +3,19 @@ package main
 import(
 	"fmt"
 	"net/http"
+	"io"
 )
 
 func main() {
 	url := "https://api.gameofthronesquotes.xyz/v1/random"
-	req, err := http.NewRequest("GET", url, nil)
+	response, err := http.Get(url)
 
 	if err != nil {
-		fmt.Println(err.Error())
+		fmt.Println("Error making http request: %s\n", err)
 	}
+	
+	body, err := io.ReadAll(response.Body)
+	defer response.Body.Close()
 
-	fmt.Println(req)
+	fmt.Println(string(body))
 }
-
-
